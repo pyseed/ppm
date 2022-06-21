@@ -49,4 +49,8 @@ function ppmInvokeDefaultScript() {
 export -f ppmInvokeDefaultScript
 
 echo "ppm ${ppmd} $*"
-ppmInvokeScript "$1" ${@:2}
+if [ -f "${cwd}/setup.py" ] || [ -f "${cwd}/setup.cfg" ]; then
+    ppmInvokeScript "$1" ${@:2}
+else
+    echo "[ERROR] current working dir is not a python project"
+fi
