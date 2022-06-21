@@ -1,5 +1,32 @@
 #!/usr/bin/env bash
 
-selfDir=$(dirname -- $(readlink -f -- "$0"))
-echo "ppm ${selfDir} $*"
-PPM_DIR=${selfDir} ${selfDir}/bin/$1 ${@:2}
+cwd=$(pwd)
+ppmd=$(dirname -- $(readlink -f -- "$0"))
+
+function ppmInvokeScript() {
+    projectScript="${cwd}/bin/$1"
+
+    if [ -f "${projectScript}" ]; then
+        # call script project side: it replaces default ppm script
+        echo "custom project script in progress... ${projectScript}"
+        echo "--"
+        echo
+        PPM_DIR=ppmd "${projectScript}" ${@:2}
+    else
+        ppmScript="${ppmd}/bin/$1"
+        if [ -f "${ppmScript}" ]; then
+            # call default ppm script
+            echo "default script in progress... ${ppmScript}"
+            echo "--"
+            echo
+            PPM_DIR=ppmd "${ppmScript}" ${@:2}
+        else
+            echo "command not found: $1"
+        fi
+    fi
+}
+# export ppmInvokeScript: sub invocation inside a ppm script
+export -f ppmInvokeScript
+
+echo "ppm ${ppmd} $*"
+ppmInvokeScript "$1" ${@:2}
