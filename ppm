@@ -1,32 +1,52 @@
 #!/usr/bin/env bash
+set -e
 
 cwd=$(pwd)
 ppmd=$(dirname -- $(readlink -f -- "$0"))
+PPM_DIR="${ppmd}"
 
 function ppmInvokeScript() {
+    # invoke custom project script or default script
+    echo "invoking script... $1"
     projectScript="${cwd}/bin/$1"
 
     if [ -f "${projectScript}" ]; then
         # call script project side: it replaces default ppm script
-        echo "custom project script in progress... ${projectScript}"
+        echo "custom project script found. in progress... ${projectScript}"
         echo "--"
         echo
-        PPM_DIR=ppmd "${projectScript}" ${@:2}
+        PPM_DIR="${PPM_DIR}" "${projectScript}" ${@:2}
     else
-        ppmScript="${ppmd}/bin/$1"
+        ppmScript="${PPM_DIR}/bin/$1"
         if [ -f "${ppmScript}" ]; then
             # call default ppm script
             echo "default script in progress... ${ppmScript}"
             echo "--"
             echo
-            PPM_DIR=ppmd "${ppmScript}" ${@:2}
+            PPM_DIR="${PPM_DIR}" "${ppmScript}" ${@:2}
         else
-            echo "command not found: $1"
+            echo "[ERROR] script not found: $1"
         fi
     fi
 }
 # export ppmInvokeScript: sub invocation inside a ppm script
 export -f ppmInvokeScript
+
+function ppmInvokeDefaultScript() {
+    # default invocation through a custom project script
+    ppmScript="${PPM_DIR}/bin/$1"
+    echo "  | base default script in progress... ${ppmScript} |"
+    echo
+
+    if [ -f "${ppmScript}" ]; then
+        # call default ppm script
+        PPM_DIR="${PPM_DIR}" "${ppmScript}" ${@:2}
+    else
+        echo "[ERROR] default script not found: $1"
+    fi
+}
+# export ppmInvokeScript: default base invocation through a custom project script
+export -f ppmInvokeDefaultScript
 
 echo "ppm ${ppmd} $*"
 ppmInvokeScript "$1" ${@:2}
