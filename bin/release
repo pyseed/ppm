@@ -1,0 +1,80 @@
+#!/usr/bin/env bash
+
+export $(cat .env | xargs)
+cat .env | xargs
+
+releaseMode="$1"
+branch=$(git rev-parse --abbrev-ref HEAD)
+versionFile=".version.txt"
+declare version
+
+if [ "${branch}" == 'master' ] || [ "${branch}" == 'main' ]; then
+    ${PPM_DIR}/lib/version "${releaseMode}" --dryrun
+    read -p "Press a key to confirm release jump (ctrl-c to abort)"
+
+    #
+    # checks
+    #
+    echo "----- CHECKS -----"
+    git pull origin "${branch}"
+    git status
+    echo "NOTE: you can take some time to prepare CHANGES.txt"
+    read -p "Press a key to confirm git status (ctrl-c to abort)"
+
+    #
+    # source checks
+    #
+    echo "----- SOURCE CHECKS -----"
+    ${PPM_DIR}/bin/lint
+    read -p "Press a key to confirm linting (ctrl-c to abort)"
+    ${PPM_DIR}/bin/test
+    read -p "Press a key to confirm unit testing (ctrl-c to abort)"
+
+    #
+    # up version
+    #
+    echo "----- UP VERSION -----"
+    ${PPM_DIR}/lib/version "${releaseMode}"
+    version=$(cat "${versionFile}" | head | tr -d '\n')
+    git diff
+    read -p "Press a key to confirm release jump to '${version}' (ctrl-c to abort)"
+    read -p "Press a key to confirm release jump to '${version}' (second confirmation) (ctrl-c to abort)"
+
+    #
+    # update CHANGES
+    #
+    echo "----- CHANGES.txt -----"
+    echo "Did you update CHANGES.txt ?"
+    read -p "Press a key to confirm CHANGES.txt (ctrl-c to abort)"
+    read -p "Press a key to confirm CHANGES.txt (second confirmation) (ctrl-c to abort)"
+
+    #
+    # build
+    #
+    echo "----- BUILD PACKAGE -----"
+    ${PPM_DIR}/bin/build
+    ls -lst ./dist | head -n 3
+    read -p "Press a key to confirm build (ctrl-c to abort)"
+
+    #
+    # git tag
+    #
+    echo "----- GIT TAG -----"
+    git commit -am "[RELEASE] ${version}"
+    git tag -a -m "${version}" "v${version}"
+
+    #
+    # upload package
+    #
+    echo "----- UPLOAD PACKAGE -----"
+    ${PPM_DIR}/bin/upload
+
+    #
+    # git push
+    #
+    echo "----- GIT PUSH -----"
+    git push origin "${branch}"
+    git push --tags origin "${branch}"
+else
+    echo 'current branch must be master/main'
+fi

@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+selfDir=$(dirname -- $(readlink -f -- "$0"))
+echo "ppm ${selfDir} $*"
+PPM_DIR=${selfDir} ${selfDir}/bin/$1 ${@:2}

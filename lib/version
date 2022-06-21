@@ -1,0 +1,72 @@
+#!/usr/bin/env python3
+
+import sys
+import json
+
+VERSION_PATH = '.version.txt'
+SETUP_CFG_PATH = 'setup.cfg'
+
+def get_version(version_str):
+    """
+    get and split version major, minor, patch
+    @return major,minor,patch
+    """
+    version_parts = [int(x) for x in version_str.replace("\r\n", "\n").split("\n")[0].split('.')]
+    assert len(version_parts) == 3
+    major, minor, patch = tuple(version_parts)
+    return major, minor, patch
+
+def increment_version(major, minor, patch, mode):
+    """
+    increment major, minor, patch
+    @return major,minor,patch
+    """
+    # increment version
+    if mode == 'patch':
+        patch += 1
+    elif mode == 'minor':
+        patch = 0
+        minor += 1
+    elif mode == 'major':
+        patch = 0
+        minor = 0
+        major += 1
+    return major, minor, patch
+
+def __main__(mode, dry_run=False):
+    """main"""
+    print(mode, '(dryrun)' if dry_run else '')
+
+    with open(VERSION_PATH, encoding='utf_8') as version_file_ro:
+        # get version from 'version file'
+        major, minor, patch = get_version(version_file_ro.read())
+        version = '.'.join([str(major), str(minor), str(patch)])
+        print('  ', version)
+
+        major, minor, patch = increment_version(major, minor, patch, args[0])
+        next_version = '.'.join([str(major), str(minor), str(patch)])
+        print('->', next_version)
+
+        if not dry_run:
+            with open(VERSION_PATH, 'w', encoding='utf_8') as version_file_w:
+                # update next version in 'version file'
+                version_file_w.write(next_version)
+
+                with open(SETUP_CFG_PATH, encoding='utf_8') as setup_cfg_file_ro:
+                    # update setup.cfg with next version
+                    content = setup_cfg_file_ro.read()
+                    content = content.replace('version = ' + version, 'version = ' + next_version)
+
+                    with open(SETUP_CFG_PATH, 'w', encoding='utf_8') as setup_cfg_file_w:
+                        setup_cfg_file_w.write(content)
+
+#
+# BODY
+#
+args = sys.argv.copy()[1:]
+assert len(args) > 0
+mode = args[0]
+assert mode and mode in ('major', 'minor', 'patch')
+dry_run = len(args) > 1 and args[1] in ('-n', '--dryrun')
+
+__main__(mode, dry_run=dry_run)

@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+export $(cat .env | xargs)
+cat .env | xargs
+
+"${VENV}/bin/python3" -m build
