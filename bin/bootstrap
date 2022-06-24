@@ -2,6 +2,7 @@
 
 import os
 import json
+import shutil
 from string import Template
 
 DATA_TOKENS = (
@@ -85,14 +86,15 @@ def substitute_file(file_path, data):
     @return resolved template
     """
     print(f'substitute file: {file_path}')
+
     new_content = ''
     with open(file_path, encoding='utf_8') as file_r:
         new_content = Template(file_r.read()).safe_substitute(**data)
-        print(new_content)
     
-    # if new_content:
-    #     with open(USER_DATA_FILE, 'w', encoding='utf_8') as file_w:
-    #         file_w.write(new_content)
+    if new_content:
+        with open(file_path, 'w', encoding='utf_8') as file_w:
+            file_w.write(new_content)
+            print('  file updated')
 
 class PpmBootstrapController:
     def __init__(self):
@@ -172,10 +174,15 @@ class PpmBootstrapController:
             check_phrase='yes',
             description='following files will be updated (token substitution):\n' + "\n - ".join(FILES)
         ):
-            for file in FILES:
-                substitute_file(file, self.data)
+            for template_file in FILES:
+                substitute_file(template_file, self.data)
 
-            # TODO rename ./src/{project_name} to real project name
+            # rename package source directory
+            print('rename package folder src/{project_name} -> src/' + self.data['project_name'])
+            shutil.move(
+                os.path.join('src', '{project_name}'),
+                os.path.join('src', self.data['project_name'])
+            )
 
     def main(self):
         """main"""
