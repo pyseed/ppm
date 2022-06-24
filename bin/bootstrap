@@ -75,54 +75,59 @@ def confirm(check_phrase: str, description=''):
 
     return res
 
-def load_user_data(user_data: dict):
-    """load user ppm profile data"""
-    print('loading user data file...', USER_DATA_FILE)
+class BootstrapController:
+    def __init__(self):
+        self.user_data = {}
+        self.data = {}
 
-    if os.path.exists(USER_DATA_FILE):
-        with open(USER_DATA_FILE, encoding='utf_8') as user_data_file:
-            print('existing user data file found')
-            user_data = json.loads(user_data_file.read())
+    def load_user_data(self):
+        """load user ppm profile data"""
+        print('loading user data file...', USER_DATA_FILE)
 
-    return user_data
+        if os.path.exists(USER_DATA_FILE):
+            with open(USER_DATA_FILE, encoding='utf_8') as user_data_file:
+                print('existing user data file found')
+                self.user_data = json.loads(user_data_file.read())
+                print(self.user_data)
 
-def save_user_data(user_data: dict, data: dict):
-    """save user ppm profile data"""
-    if confirm(
-        check_phrase='yes',
-        description='would you like to save your developer personal infos for next bootstraps'
-    ):
+    def save_user_data(self):
+        """save user ppm profile data"""
+        if confirm(
+            check_phrase='yes',
+            description='would you like to save your developer personal infos for next bootstraps'
+        ):
+            for key in USER_DATA_TOKENS:
+                self.user_data[key] = self.data[key]
 
-        for key in USER_DATA_TOKENS:
-            user_data[key] = data[key]
+            user_data_content = json.dumps(self.user_data, indent=4)
+            print('saving user data file...', USER_DATA_FILE)
+            print(user_data_content)
+            with open(USER_DATA_FILE, 'w', encoding='utf_8') as user_data_file:
+                self.user_data = user_data_file.write(user_data_content)
 
-        user_data_content = json.dumps(user_data, indent=4)
-        print('saving user data file...', USER_DATA_FILE)
-        print(user_data_content)
-        with open(USER_DATA_FILE, 'w', encoding='utf_8') as user_data_file:
-            user_data = user_data_file.write(user_data_content)
+    def set_data(self):
+        """set template tokens data (prompts)"""
+        description=''
 
-def set_data(data: dict):
-    """set template tokens data (prompts)"""
-    description=''
+        data_default = {**DATA_TOKENS_DEFAULT, **self.user_data}
 
-    for token in DATA_TOKENS:
-        data[token[0]] = prompt(
-            prompt_message=token[1],
-            description=description,
-            default=DATA_TOKENS_DEFAULT.get(token[0], False),
-            required=True,
-        )
-    print(data)
+        for token in DATA_TOKENS:
+            self.data[token[0]] = prompt(
+                prompt_message=token[1],
+                description=description,
+                default=data_default.get(token[0], False),
+                required=True,
+            )
+        print(self.data)
 
-def __main__():
-    user_data = {}
-    load_user_data(user_data)
+    def main(self):
+        """main"""
+        #
+        # get data to substitute in template
+        #
+        self.load_user_data()
+        self.set_data()
+        if not self.user_data:
+            self.save_user_data()
 
-    data = {**user_data}
-    set_data(data)
-
-    if not user_data:
-        save_user_data(user_data, data)
-
-__main__()
+BootstrapController().main()
