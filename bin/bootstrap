@@ -2,6 +2,7 @@
 
 import os
 import json
+from string import Template
 
 DATA_TOKENS = (
     ('project_name', 'project name (and name of package)'),
@@ -20,7 +21,7 @@ DATA_TOKENS_DEFAULT = {
 USER_DATA_FILE = os.path.join(os.path.expanduser("~"), '.local', 'share', 'ppm.json')
 USER_DATA_TOKENS = ('developer_fullname', 'developer_email', 'developer_login')
 
-# files that are required in template, if any missing an alert will be raised before bootstrapping
+# files that are required in template, if any missing an alert will be raised
 FILES = (
     '.gitignore',
     '.pylintrc',
@@ -35,13 +36,16 @@ FILES = (
     'setup.py',
 )
 
-# DIRS that are required in template, if any missing an alert will be raised before bootstrapping
+# folders that are required in template, if any missing an alert will be raised
 DIRS = (
     'bin',
     'docs',
     'src/{project_name}',
     'tests',
 )
+
+class PpmBootstrapException(Exception):
+    """invalid exception (checks)"""
 
 def prompt(prompt_message: str, description='', default='', required=False):
     """ask for template tokens values"""
@@ -75,7 +79,22 @@ def confirm(check_phrase: str, description=''):
 
     return res
 
-class BootstrapController:
+def substitute_file(file_path, data):
+    """
+    from template, replace ${key} with value from data dict
+    @return resolved template
+    """
+    print(f'substitute file: {file_path}')
+    new_content = ''
+    with open(file_path, encoding='utf_8') as file_r:
+        new_content = Template(file_r.read()).safe_substitute(**data)
+        print(new_content)
+    
+    # if new_content:
+    #     with open(USER_DATA_FILE, 'w', encoding='utf_8') as file_w:
+    #         file_w.write(new_content)
+
+class PpmBootstrapController:
     def __init__(self):
         self.user_data = {}
         self.data = {}
@@ -120,6 +139,44 @@ class BootstrapController:
             )
         print(self.data)
 
+    def check_files(self):
+        """check required files exist"""
+
+        invalid_dirs = []
+        for dir in DIRS:
+            if not os.path.exists(dir):
+                invalid_dirs.append(dir)
+            if not os.path.isdir(dir):
+                invalid_dirs.append(dir)
+        if invalid_dirs:
+            raise PpmBootstrapException(
+                'missing (or not a directory) expected folders',
+                ','.join(invalid_dirs)
+            )
+
+        invalid_files = []
+        for file in FILES:
+            if not os.path.exists(file):
+                invalid_files.append(file)
+            if not os.path.isfile(file):
+                invalid_files.append(file)
+        if invalid_files:
+            raise PpmBootstrapException(
+                'missing (or not a file) expected files',
+                ','.join(invalid_files)
+            )
+
+    def substitute_files(self):
+        """substitute files"""
+        if confirm(
+            check_phrase='yes',
+            description='following files will be updated (token substitution):\n' + "\n - ".join(FILES)
+        ):
+            for file in FILES:
+                substitute_file(file, self.data)
+
+            # TODO rename ./src/{project_name} to real project name
+
     def main(self):
         """main"""
         #
@@ -130,4 +187,10 @@ class BootstrapController:
         if not self.user_data:
             self.save_user_data()
 
-BootstrapController().main()
+        #
+        # substitute files
+        #
+        self.check_files()  # check required files exist
+        self.substitute_files()  # substitute files
+
+PpmBootstrapController().main()
