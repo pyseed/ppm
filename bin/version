@@ -42,7 +42,7 @@ def main(mode, dry_run=False):
         version = '.'.join([str(major), str(minor), str(patch)])
         print('  ', version)
 
-        major, minor, patch = increment_version(major, minor, patch, args[0])
+        major, minor, patch = increment_version(major, minor, patch, mode)
         next_version = '.'.join([str(major), str(minor), str(patch)])
         print('->', next_version)
 

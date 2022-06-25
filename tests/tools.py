@@ -17,3 +17,17 @@ def import_command_module(command_name):
     spec.loader.exec_module(command_module)
 
     return command_module
+
+def create_file(func, content):
+    """
+    create test file
+    @return (func, file_desc, content, )
+    """
+    with open(str(func), "w", encoding='utf-8') as file_desc:
+        file_desc.write(content)
+        return (func, content, file_desc)
+
+def load_file(file_path):
+    """load file"""
+    with open(file_path, "r", encoding='utf-8') as file_desc:
+        return file_desc.read()
