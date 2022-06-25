@@ -114,6 +114,10 @@ if __name__ == '__main__':
 
 setup project (after bootstrap)
 
+after this stage, you work, you ppm lint, ppm test
+
+when you are ready for your first pre release type `ppm release minor` for 0.1.0
+
 ### lint
 
 python linting
