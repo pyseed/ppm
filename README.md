@@ -26,7 +26,7 @@ project template should have the folowing structure:
 
 - bin/
 - docs/
-- src/{project_name}/' the typo should be {project_name} for bootstrap to rename with real project name
+- src/{project_name}/ the typo should be {project_name} for bootstrap to rename with real project name
 - tests/
 - .gitignore
 - .pylintrc
