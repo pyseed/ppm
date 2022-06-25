@@ -168,3 +168,8 @@ this command is called by 'release' command, but you can reupload here
 ```
 bash ./setup.sh dev
 ```
+
+when a new command is added, and in python:
+
+- test.sh must be updated to lint the command file
+  

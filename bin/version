@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
+"""increment semver version"""
 
 import sys
-import json
 
 VERSION_PATH = '.version.txt'
 SETUP_CFG_PATH = 'setup.cfg'
@@ -65,8 +65,8 @@ def __main__(mode, dry_run=False):
 #
 args = sys.argv.copy()[1:]
 assert len(args) > 0
-mode = args[0]
-assert mode and mode in ('major', 'minor', 'patch')
-dry_run = len(args) > 1 and args[1] in ('-n', '--dryrun')
+release_mode = args[0]
+assert release_mode and release_mode in ('major', 'minor', 'patch')
+has_dry_run = len(args) > 1 and args[1] in ('-n', '--dryrun')
 
-__main__(mode, dry_run=dry_run)
+__main__(release_mode, dry_run=has_dry_run)
