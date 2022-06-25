@@ -213,4 +213,5 @@ class PpmBootstrapController:
         self.check_files()  # check required files exist
         self.substitute_files()  # substitute files
 
-PpmBootstrapController().main()
+if __name__ == '__main__':
+    PpmBootstrapController().main()

@@ -9,17 +9,16 @@ SETUP_CFG_PATH = 'setup.cfg'
 def get_version(version_str):
     """
     get and split version major, minor, patch
-    @return major,minor,patch
+    @return tuple major,minor,patch
     """
     version_parts = [int(x) for x in version_str.replace("\r\n", "\n").split("\n")[0].split('.')]
     assert len(version_parts) == 3
-    major, minor, patch = tuple(version_parts)
-    return major, minor, patch
+    return tuple(version_parts)
 
 def increment_version(major, minor, patch, mode):
     """
     increment major, minor, patch
-    @return major,minor,patch
+    @return tuple major,minor,patch
     """
     # increment version
     if mode == 'patch':
