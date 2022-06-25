@@ -4,13 +4,11 @@ set -e
 export $(cat .env | xargs)
 cat .env | xargs
 
-# TODO remove --repository testpypi (test.pypi.org)
-"${VENV}/bin/python3" -m twine upload --repository testpypi dist/*
+"${VENV}/bin/python3" -m twine upload dist/*
 
-# TODO remove --index-url https://test.pypi.org/simple/ (test.pypi.org)
 test_venv="/tmp/${PROJECT}-venv"
 echo "testing latest uploaded package in temporary virtualenv ${test_venv}..."
 python3 -m venv "${test_venv}"
-"${test_venv}/bin/pip3" install --index-url https://test.pypi.org/simple/ --no-deps "${PROJECT}"
+"${test_venv}/bin/pip3" install "${PROJECT}"
 "${test_venv}/bin/python3" -c "import ${PROJECT}; print(${PROJECT})"
 rm -r "${test_venv}"

@@ -189,6 +189,34 @@ echo "example of setup override"
 "$venv/bin/pip3" --version
 ```
 
+## releases/upload to testpypi
+
+to test your releases/upload to testpypi, please override default upload in your current project directory
+
+you will upload to testpypi with `twine upload --repository testpypi dist/*`
+
+and test your package from related https://test.pypi.org/simple/ index
+
+./bin/upload:
+
+```
+#!/usr/bin/env bash
+set -e
+
+export $(cat .env | xargs)
+cat .env | xargs
+
+# upload to testpypi
+"${VENV}/bin/python3" -m twine upload --repository testpypi dist/*
+
+test_venv="/tmp/${PROJECT}-venv"
+echo "testing latest uploaded package in temporary virtualenv ${test_venv}..."
+python3 -m venv "${test_venv}"
+"${test_venv}/bin/pip3" install --index-url https://test.pypi.org/simple/ --no-deps "${PROJECT}"
+"${test_venv}/bin/python3" -c "import ${PROJECT}; print(${PROJECT})"
+rm -r "${test_venv}"
+```
+
 ## development
 
 ```
