@@ -33,7 +33,7 @@ def increment_version(major, minor, patch, mode):
         major += 1
     return major, minor, patch
 
-def __main__(mode, dry_run=False):
+def main(mode, dry_run=False):
     """main"""
     print(mode, '(dryrun)' if dry_run else '')
 
@@ -63,10 +63,11 @@ def __main__(mode, dry_run=False):
 #
 # BODY
 #
-args = sys.argv.copy()[1:]
-assert len(args) > 0
-release_mode = args[0]
-assert release_mode and release_mode in ('major', 'minor', 'patch')
-has_dry_run = len(args) > 1 and args[1] in ('-n', '--dryrun')
+if __name__ == '__main__':
+    args = sys.argv.copy()[1:]
+    assert len(args) > 0
+    release_mode = args[0]
+    assert release_mode and release_mode in ('major', 'minor', 'patch')
+    has_dry_run = len(args) > 1 and args[1] in ('-n', '--dryrun')
 
-__main__(release_mode, dry_run=has_dry_run)
+    main(release_mode, dry_run=has_dry_run)
