@@ -120,18 +120,14 @@ class PpmBootstrapController:
 
     def save_user_data(self):
         """save user ppm profile data"""
-        if confirm(
-            check_phrase='yes',
-            description='would you like to save your developer personal infos for next bootstraps'
-        ):
-            for key in USER_DATA_TOKENS:
-                self.user_data[key] = self.data[key]
+        for key in USER_DATA_TOKENS:
+            self.user_data[key] = self.data[key]
 
-            user_data_content = json.dumps(self.user_data, indent=4)
-            print('saving user data file...', USER_DATA_FILE)
-            print(user_data_content)
-            with open(USER_DATA_FILE, 'w', encoding='utf_8') as user_data_file:
-                self.user_data = user_data_file.write(user_data_content)
+        user_data_content = json.dumps(self.user_data, indent=4)
+        print('saving user data file...', USER_DATA_FILE)
+        print(user_data_content)
+        with open(USER_DATA_FILE, 'w', encoding='utf_8') as user_data_file:
+            user_data_file.write(user_data_content)
 
     def set_data(self):
         """set template tokens data (prompts)"""
@@ -175,11 +171,6 @@ class PpmBootstrapController:
                 ','.join(invalid_files)
             )
 
-        # set default version file
-        if not os.path.exists('.version.txt'):
-            with open('.version.txt', encoding='utf_8') as version_file:
-                version_file.write('0.1.0')
-
     def substitute_files(self):
         """substitute files"""
         if confirm(
@@ -205,13 +196,23 @@ class PpmBootstrapController:
         self.load_user_data()
         self.set_data()
         if not self.user_data:
-            self.save_user_data()
+            if confirm(
+                check_phrase='yes',
+                description= \
+                    'would you like to save your developer personal infos for next bootstraps'
+            ):
+                self.save_user_data()
 
         #
         # substitute files
         #
         self.check_files()  # check required files exist
         self.substitute_files()  # substitute files
+
+        # set default version file
+        if not os.path.exists('.version.txt'):
+            with open('.version.txt', encoding='utf_8') as version_file:
+                version_file.write('0.1.0')
 
 if __name__ == '__main__':
     PpmBootstrapController().main()

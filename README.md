@@ -219,11 +219,19 @@ rm -r "${test_venv}"
 
 ## development
 
+development setup:
+
 ```
 bash ./setup.sh dev
 ```
 
-when a new command is added, and in python:
+linting + tests:
+
+```
+./test
+```
+
+when a new command is added as python script:
 
 - test.sh must be updated to lint the command file
-  
+- run `./test`

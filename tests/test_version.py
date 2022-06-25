@@ -27,8 +27,8 @@ def setupcfg_file(setupcfg_file_path):  # pylint: disable = redefined-outer-name
     """fixture setup.cfg file"""
     return tools.create_file(setupcfg_file_path, '[metadata]\nversion = 1.2.3')
 
-class TestVersion():  # pylint: disable = too-few-public-methods
-    """example test"""
+class TestVersion():
+    """version test"""
     def test_get_version(self):  # pylint: disable = redefined-outer-name
         """test get_version"""
         assert version.get_version('1.2.3') == (1, 2, 3)
