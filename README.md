@@ -11,9 +11,11 @@ ppm [command]
 
 ## commands
 
-# bootstrap
+### bootstrap
 
 bootstrap python project from current directory
+
+please first prepare following actions:
 
 - create a github project
 - clone it
@@ -56,13 +58,13 @@ README.md:
 ${project_description}
 ```
 
- LICENSE.txt:
+LICENSE.txt:
 
- ```
- Copyright 2022 ${developer_fullname}
+```
+Copyright 2022 ${developer_fullname}
 
- ...
- ```
+...
+```
 
 for setup.cfg/py example with a static setup.cfg and its "setup.py wrapper"
 
@@ -108,19 +110,19 @@ if __name__ == '__main__':
     setuptools.setup()
 ```
 
-## setup
+### setup
 
 setup project (after bootstrap)
 
-## lint
+### lint
 
 python linting
 
-## test
+### test
 
 run pytest unit tests
 
-## release
+### release
 
 ```
 release patch
@@ -140,13 +142,13 @@ you must be on 'master/main' branch
 
 current version is in .version.txt, semver will be incremented according to the patch/minor/major release
 
-## build
+### build
 
 build dist
 
 this command is called by 'release' command, but you can rebuild here
 
-## upload
+### upload
 
 upload dist
 
