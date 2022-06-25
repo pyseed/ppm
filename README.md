@@ -163,6 +163,32 @@ upload dist
 
 this command is called by 'release' command, but you can reupload here
 
+## custom command
+
+you can create a custom command in ./bin/mycommand of your current project directory
+
+file must be executable plus bash/python adhoc shebang
+
+you can override or replace default ppm command (if the command file has same name as the default command)
+
+with ppmInvokeDefaultScript function, you can invoke the default command
+
+example for setup command:
+
+./bin/setup
+
+```
+#!/usr/bin/env bash
+set -e
+
+venv="$(pwd)/venv"
+
+ppmInvokeDefaultScript setup
+echo "example of setup override"
+"$venv/bin/pip3" freeze
+"$venv/bin/pip3" --version
+```
+
 ## development
 
 ```
