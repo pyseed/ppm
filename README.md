@@ -143,11 +143,13 @@ release minor
 release major
 ```
 
-build a release: build dist + pypy upload + git tag + git push
+build a release: build dist + pypi upload + git tag + git push
 
-you must be on 'master/main' branch
+you must be on 'master/main' branch (ppm will check this for you before)
 
 current version is in .version.txt, semver will be incremented according to the patch/minor/major release
+
+theres is confirmations during steps of the process
 
 ### build
 
