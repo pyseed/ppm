@@ -97,6 +97,8 @@ python_requires = ${python_requires}
 where = src
 ```
 
+options.python_requires will be processed by '${python_requires}' token, tokens are set with console user questions
+
 setup.py:
 
 ```
@@ -121,6 +123,7 @@ when you are ready for your first pre release type `ppm release minor` for 0.1.0
 ### lint
 
 python linting
+
 
 ### test
 
