@@ -15,6 +15,8 @@ ppm [command]
 
 bootstrap python project from current directory
 
+[templates here](https://github.com/pyseed/ppm_boilerplate_templates)
+
 please first prepare following actions:
 
 - create a github project: **repo must have same name as the python package name**
