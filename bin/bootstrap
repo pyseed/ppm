@@ -4,6 +4,7 @@
 import os
 import json
 import shutil
+import glob
 from string import Template
 
 DATA_TOKENS = (
@@ -175,7 +176,7 @@ class PpmBootstrapController:
         """substitute files"""
         if confirm(
             check_phrase='yes',
-            description='following files will be updated (token substitution):\n' \
+            description='docs/*.md, src/*.py, tests/*.py plus following files will be updated (token substitution):\n' \
                 + "\n - ".join(FILES)
         ):
             for template_file in FILES:
@@ -187,6 +188,15 @@ class PpmBootstrapController:
                 os.path.join('src', '{project_name}'),
                 os.path.join('src', self.data['project_name'])
             )
+
+            # substitute doc files
+            for md_file in glob.glob('docs/*.md', recursive=True):
+                substitute_file(md_file, self.data)
+
+            # substitute python files
+            py_files = glob.glob('src/*.py', recursive=True) + glob.glob('tests/*.py', recursive=True)
+            for py_file in py_files:
+                substitute_file(py_file, self.data)
 
     def main(self):
         """main"""

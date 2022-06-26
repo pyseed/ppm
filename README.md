@@ -17,7 +17,7 @@ bootstrap python project from current directory
 
 please first prepare following actions:
 
-- create a github project
+- create a github project: **repo must have same name as the python package name**
 - clone it
 - cd it
 - copy your template inside it
