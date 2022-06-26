@@ -26,7 +26,7 @@ project template should have the folowing structure:
 
 - bin/
 - docs/
-- src/{project_name}/ the typo should be {project_name} for bootstrap to rename with real project name
+- src/{project_name}/ the typo should be {project_name}, bootstrap will rename token with real project name
 - tests/
 - .gitignore
 - .pylintrc
@@ -48,7 +48,9 @@ following tokens will be replaced for each files:
 - ${developer_login}
 - ${python_requires}
 
-readme example, README.md:
+tokens are set with console user questions
+
+#### readme example, README.md:
 
 ```
 (dash) ${project_name}
@@ -56,7 +58,7 @@ readme example, README.md:
 ${project_description}
 ```
 
-license example, LICENSE.txt:
+#### license example, LICENSE.txt:
 
 ```
 Copyright 2022 ${developer_fullname}
@@ -64,7 +66,7 @@ Copyright 2022 ${developer_fullname}
 (license terms)
 ```
 
-setup.cfg/py example, a static setup.cfg and its "setup.py wrapper"
+#### setup.cfg/py example, a static setup.cfg and its "setup.py wrapper"
 
 setup.cfg:
 
@@ -95,7 +97,7 @@ python_requires = ${python_requires}
 where = src
 ```
 
-options.python_requires will be processed by '${python_requires}' token, tokens are set with console user questions
+options.python_requires will be processed by '${python_requires}' token
 
 setup.py:
 
