@@ -122,7 +122,7 @@ when you are ready for your first pre release type `ppm release minor` for 0.1.0
 
 ### lint
 
-python linting
+pytest python linting
 
 ### test
 
@@ -170,11 +170,11 @@ file must be executable plus bash/python adhoc shebang
 
 you can override or replace default ppm command (if the command file has same name as the default command)
 
+for exemplace replace lint/test to use unittest versus pytest, etc...
+
 with ppmInvokeDefaultScript function, you can invoke the default command
 
-example for setup command:
-
-./bin/setup
+example for setup command, ./bin/setup:
 
 ```
 #!/usr/bin/env bash
