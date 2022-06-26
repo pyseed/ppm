@@ -150,6 +150,8 @@ current version is in .version.txt, semver will be incremented according to the 
 
 theres is confirmations during steps of the process
 
+you can checkout all changes (git checkout .) or edit version in '.version.txt' in case you need rollback after a process failure
+
 ### build
 
 build dist
