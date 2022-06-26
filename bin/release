@@ -35,6 +35,7 @@ if [ "${branch}" == 'master' ] || [ "${branch}" == 'main' ]; then
     # up version
     #
     echo "----- UP VERSION -----"
+    read -p "Next you can check the diff. press 'q' to quit diff display when ready"
     ppmInvokeScript version "${releaseMode}"
     version=$(cat "${versionFile}" | head | tr -d '\n')
     git diff
