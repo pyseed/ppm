@@ -59,17 +59,17 @@ if [ "${branch}" == 'master' ] || [ "${branch}" == 'main' ]; then
     read -p "Press a key to confirm build (ctrl-c to abort)"
 
     #
+    # upload package
+    #
+    echo "----- UPLOAD PACKAGE -----"
+    ppmInvokeScript upload
+
+    #
     # git tag
     #
     echo "----- GIT TAG -----"
     git commit -am "[RELEASE] ${version}"
     git tag -a -m "${version}" "v${version}"
-
-    #
-    # upload package
-    #
-    echo "----- UPLOAD PACKAGE -----"
-    ppmInvokeScript upload
 
     #
     # git push
