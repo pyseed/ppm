@@ -1,21 +1,20 @@
 #!/usr/bin/env bash
 set -e
 
-cwd=$(pwd)
-ppmd=$(dirname -- $(readlink -f -- "$0"))
-PPM_DIR="${ppmd}"
+CWD="$(pwd)"
+PPM_DIR="$(dirname -- $(readlink -f -- "$0"))"
 
 function ppmInvokeScript() {
     # invoke custom project script or default script
     echo "invoking script... $1"
-    projectScript="${cwd}/bin/$1"
+    projectScript="${CWD}/bin/$1"
 
     if [ -f "${projectScript}" ]; then
         # call script project side: it replaces default ppm script
         echo "custom project script found. in progress... ${projectScript}"
         echo "--"
         echo
-        PPM_DIR="${PPM_DIR}" "${projectScript}" ${@:2}
+        CWD="${CWD}" PPM_DIR="${PPM_DIR}" "${projectScript}" ${@:2}
     else
         ppmScript="${PPM_DIR}/bin/$1"
         if [ -f "${ppmScript}" ]; then
@@ -23,7 +22,7 @@ function ppmInvokeScript() {
             echo "default script in progress... ${ppmScript}"
             echo "--"
             echo
-            PPM_DIR="${PPM_DIR}" "${ppmScript}" ${@:2}
+            CWD="${CWD}" PPM_DIR="${PPM_DIR}" "${ppmScript}" ${@:2}
         else
             echo "[ERROR] script not found: $1"
         fi
@@ -40,7 +39,7 @@ function ppmInvokeDefaultScript() {
 
     if [ -f "${ppmScript}" ]; then
         # call default ppm script
-        PPM_DIR="${PPM_DIR}" "${ppmScript}" ${@:2}
+        CWD="${CWD}" PPM_DIR="${PPM_DIR}" "${ppmScript}" ${@:2}
     else
         echo "[ERROR] default script not found: $1"
     fi
@@ -48,8 +47,8 @@ function ppmInvokeDefaultScript() {
 # export ppmInvokeScript: default base invocation through a custom project script
 export -f ppmInvokeDefaultScript
 
-echo "ppm ${ppmd} $*"
-if [ -f "${cwd}/setup.py" ] || [ -f "${cwd}/setup.cfg" ]; then
+echo "ppm ${PPM_DIR} $*"
+if [ -f "${CWD}/setup.py" ] || [ -f "${CWD}/setup.cfg" ]; then
     ppmInvokeScript "$1" ${@:2}
 else
     echo "[ERROR] current working dir is not a python project"
