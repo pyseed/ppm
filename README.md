@@ -188,7 +188,7 @@ echo "example of setup override"
 "$venv/bin/pip3" --version
 ```
 
-please first look at default commands when you need to replace, override or customize: [default commands](https://github.com/pyseed/ppm/tree/master/bin)
+please first look at default commands when you need to replace, override or customize: [default commands](./bin)
 
 ## releases/upload to testpypi
 
