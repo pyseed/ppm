@@ -22,11 +22,11 @@ please first prepare following actions:
 - cd it
 - copy your template inside it
 
-project template should have the folowing structure:
+project template should have the following structure:
 
 - bin/
 - docs/
-- src/{project_name}/ the typo should be {project_name}, bootstrap will rename token with real project name
+- src/{project_name}/ the typo should be {project_name}, bootstrap will rename token with the real project name
 - tests/
 - .gitignore
 - .pylintrc
@@ -53,7 +53,7 @@ tokens are set with console user questions
 #### readme example, README.md:
 
 ```
-(dash) ${project_name}
+# ${project_name}
 
 ${project_description}
 ```
@@ -144,7 +144,7 @@ release major
 
 build a release: build dist + pypi upload + git tag + git push
 
-you must be on 'master/main' branch (ppm will check this for you before)
+you must be on 'master/main' branch (ppm will check this for you)
 
 current version is in .version.txt, semver will be incremented according to the patch/minor/major release
 
@@ -187,6 +187,8 @@ echo "example of setup override"
 "$venv/bin/pip3" freeze
 "$venv/bin/pip3" --version
 ```
+
+please first look at default commands when you need to replace, override or customize: [default commands](https://github.com/pyseed/ppm/tree/master/bin)
 
 ## releases/upload to testpypi
 
@@ -233,4 +235,4 @@ linting + tests:
 when a new command is added as python script:
 
 - test.sh must be updated to lint the command file
-- run `./test`
+- run `./test.sh`
