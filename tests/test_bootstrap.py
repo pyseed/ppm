@@ -93,3 +93,22 @@ class TestBootstrapController():  # pylint: disable = too-few-public-methods
             ctl.check_files()
         except bootstrap.PpmBootstrapException as exception:
             assert False, f'{exception} should not raise'
+
+    def test_check_files_raise_file_missing(self):
+        """test check_files: file missing"""
+        bootstrap.DIRS = []
+        bootstrap.FILES = ['/idonotexist.txt']
+        ctl = bootstrap.PpmBootstrapController()
+        with pytest.raises(bootstrap.PpmBootstrapException):
+            ctl.check_files()
+
+    @pytest.mark.usefixtures('template_file')
+    def test_check_files_file_exist(self, template_file):  # pylint: disable = redefined-outer-name
+        """test check_files: file exists"""
+        bootstrap.DIRS = []
+        bootstrap.FILES = [str(template_file[0])]
+        ctl = bootstrap.PpmBootstrapController()
+        try:
+            ctl.check_files()
+        except bootstrap.PpmBootstrapException as exception:
+            assert False, f'{exception} should not raise'
