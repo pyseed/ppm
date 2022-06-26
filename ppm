@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
+VERSION=0.1.0
 CWD="$(pwd)"
 PPM_DIR="$(dirname -- $(readlink -f -- "$0"))"
 
@@ -47,7 +48,7 @@ function ppmInvokeDefaultScript() {
 # export ppmInvokeScript: default base invocation through a custom project script
 export -f ppmInvokeDefaultScript
 
-echo "ppm ${PPM_DIR} $*"
+echo "ppm ${VERSION} ${PPM_DIR}: $*"
 if [ -f "${CWD}/setup.py" ] || [ -f "${CWD}/setup.cfg" ]; then
     ppmInvokeScript "$1" ${@:2}
 else
