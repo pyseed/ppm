@@ -48,9 +48,7 @@ following tokens will be replaced for each files:
 - ${developer_login}
 - ${python_requires}
 
-for readme and license for example:
-
-README.md:
+readme example, README.md:
 
 ```
 (dash) ${project_name}
@@ -58,15 +56,15 @@ README.md:
 ${project_description}
 ```
 
-LICENSE.txt:
+license example, LICENSE.txt:
 
 ```
 Copyright 2022 ${developer_fullname}
 
-...
+(license terms)
 ```
 
-for setup.cfg/py example with a static setup.cfg and its "setup.py wrapper"
+setup.cfg/py example, a static setup.cfg and its "setup.py wrapper"
 
 setup.cfg:
 
@@ -123,7 +121,6 @@ when you are ready for your first pre release type `ppm release minor` for 0.1.0
 ### lint
 
 python linting
-
 
 ### test
 
