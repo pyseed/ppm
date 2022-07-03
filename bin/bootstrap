@@ -86,10 +86,10 @@ def confirm(check_phrase: str, description=''):
 
     return res
 
-def substitute_file(file_path, data):
+def substitute_file(file_path: str, data: dict):
     """
     from template, replace ${key} with value from data dict
-    @return resolved template
+    :return resolved template
     """
     print(f'substitute file: {file_path}')
 
